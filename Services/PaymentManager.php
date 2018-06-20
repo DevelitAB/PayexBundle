@@ -99,7 +99,7 @@ class PaymentManager
         $lastRequest = $this->pxOrder->getLastRequest();
 
         if ($response->status->errorCode == 'OK' && !empty($response->redirectUrl)) {
-            $redirectUrl = $response->redirectUrl;
+            $payexPaymentDTO->setRedirectUrl($response->redirectUrl);
         } else {
             throw new \RuntimeException('Payex server response error');
         }
@@ -115,7 +115,7 @@ class PaymentManager
         return $payexPayment;
     }
 
-    public function completePayment($orderRef): bool
+    public function completePayment($orderRef): PayexPayment
     {
         $completeParams = [
             'accountNumber' => $this->accountNumber,
@@ -134,16 +134,54 @@ class PaymentManager
         }
 
         $response = $this->pxOrder->complete($completeParams);
-        $this->pxOrder->getLastRequest();
+        $lastRequest = $this->pxOrder->getLastRequest();
+
+        $payexPaymentDTO = $this->fillPayexPaymentDTO(
+            $response->amount,
+            $response->paymentMethod,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $response->orderId,
+            null,
+            null
+        );
+
+        $payexPayment = $this->storePayexPayment(
+            $payexPaymentDTO,
+            $response->orderRef,
+            $response->sessionRef,
+            $lastRequest,
+            $response,
+            $response->transactionRef,
+            $response->transactionStatus,
+            $response->orderStatus,
+            $response->transactionNumber
+        );
 
         if ($response->status->errorCode == 'OK' ) {
             if (($response->transactionStatus == 0) || ($response->transactionStatus == 3)) {
-                return true;
+                $payexPayment = $this->storePayexPayment(
+                    $payexPaymentDTO,
+                    $response->orderRef,
+                    $response->sessionRef,
+                    $lastRequest,
+                    $response,
+                    $response->transactionRef,
+                    $response->transactionStatus,
+                    $response->orderStatus,
+                    $response->transactionNumber
+                );
+
+                return $payexPayment;
             } else {
-                return false;
+                throw new \RuntimeException('Payex server response error');
             }
         } else {
-            return false;
+            throw new \RuntimeException('Payex server response error');
         }
     }
 
@@ -206,7 +244,17 @@ class PaymentManager
         return $payexPaymentDTO;
     }
 
-    public function storePayexPayment(PayexPaymentDTO $payexPaymentDTO, $orderRef, $sessionRef, $request, $response): PayexPayment
+    public function storePayexPayment(
+        PayexPaymentDTO $payexPaymentDTO,
+        $orderRef,
+        $sessionRef,
+        $request,
+        $response,
+        $transactionRef = null,
+        $transactionStatus = null,
+        $orderStatus = null,
+        $transactionNumber = null
+    ): PayexPayment
     {
         $payexPayment = new PayexPayment();
         $payexPayment->setClientId($payexPaymentDTO->getClientId());
@@ -216,12 +264,12 @@ class PaymentManager
         $payexPayment->setPaymentMethod($payexPaymentDTO->getView());
         $payexPayment->setOrderRef($orderRef);
         $payexPayment->setSessionRef($sessionRef);
-        //$payexPayment->setTransactionRef($username);
-        $payexPayment->setRedirectUrl($payexPaymentDTO->getReturnUrl());
+        $payexPayment->setTransactionRef($transactionRef);
+        $payexPayment->setRedirectUrl($payexPaymentDTO->getRedirectUrl());
         $payexPayment->setCancelUrl($payexPaymentDTO->getCancelUrl());
-        //$payexPayment->setTransactionStatus($username);
-        //$payexPayment->setOrderStatus($username);
-        //$payexPayment->setTransactionNumber($username);
+        $payexPayment->setTransactionStatus($transactionStatus);
+        $payexPayment->setOrderStatus($orderStatus);
+        $payexPayment->setTransactionNumber($transactionNumber);
         $payexPayment->setOrderId($payexPaymentDTO->getOrderId());
         $payexPayment->setRequestDetails($request);
         $payexPayment->setResponseDetails($response);
