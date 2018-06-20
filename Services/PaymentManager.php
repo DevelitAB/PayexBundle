@@ -71,7 +71,7 @@ class PaymentManager
         $this->config = $config;
     }
 
-    public function initializePayment(PayexPaymentDTO $payexPaymentDTO): string
+    public function initializePayment(PayexPaymentDTO $payexPaymentDTO): PayexPayment
     {
         $initialize8Params = [
             'accountNumber' => $this->accountNumber,
@@ -104,7 +104,7 @@ class PaymentManager
             throw new \RuntimeException('Payex server response error');
         }
 
-        $this->storePayexPayment(
+        $payexPayment = $this->storePayexPayment(
             $payexPaymentDTO,
             $response->orderRef,
             $response->sessionRef,
@@ -112,7 +112,7 @@ class PaymentManager
             $response
         );
 
-        return $redirectUrl;
+        return $payexPayment;
     }
 
     public function completePayment($orderRef): bool
