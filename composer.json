@@ -1,0 +1,23 @@
+{
+  "name": "bsadnu/payex-bundle",
+  "description": "A lightweight symfony bundle that implements PayEx payments https://payex.com/",
+  "keywords": ["symfony", "payex"],
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name":     "Stas Bannikov",
+      "email":    "sab.ukraine@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "symfony/framework-bundle": "^4.0",
+    "symfony/orm-pack": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bsadnu\\PayexBundle\\": ""
+    }
+  }
+}

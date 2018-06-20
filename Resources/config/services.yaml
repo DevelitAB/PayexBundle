@@ -1,0 +1,13 @@
+services:
+    bsadnu.payex.payment_manager:
+        alias: Bsadnu\PayexBundle\Services\PaymentManager
+        public: true
+    Bsadnu\PayexBundle\Repository\PayexPaymentRepository:
+        autowire: true
+        public: false
+        tags: ['doctrine.repository_service']
+    Bsadnu\PayexBundle\Services\PaymentManager:
+        public: false
+        arguments:
+            - '%bsadnu.payex.config%'
+            - '@doctrine.orm.entity_manager'
