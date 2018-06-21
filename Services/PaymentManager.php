@@ -163,7 +163,7 @@ class PaymentManager
 
         if ($response->status->errorCode == 'OK' ) {
             if (($response->transactionStatus == 0) || ($response->transactionStatus == 3)) {
-                $payexPayment = $this->storePayexPayment(
+                $this->storePayexPayment(
                     $payexPaymentDTO,
                     $response->orderRef,
                     $response->sessionRef,
