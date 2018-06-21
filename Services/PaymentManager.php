@@ -115,7 +115,7 @@ class PaymentManager
         return $payexPayment;
     }
 
-    public function completePayment(string $orderRef, string $customData): PayexPayment
+    public function completePayment(string $orderRef, string $customData = ''): PayexPayment
     {
         $completeParams = [
             'accountNumber' => $this->accountNumber,
