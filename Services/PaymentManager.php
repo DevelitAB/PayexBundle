@@ -136,18 +136,28 @@ class PaymentManager
         $response = $this->pxOrder->complete($completeParams);
         $lastRequest = $this->pxOrder->getLastRequest();
 
+        if ('DD' == $response->paymentMethod) {
+            $view = PayexPaymentDTO::VIEW_DIRECTDEBIT;
+        } elseif ('SWISH' == $response->paymentMethod) {
+            $view = PayexPaymentDTO::VIEW_SWISH;
+        } elseif ('VISA' == $response->paymentMethod) {
+            $view = PayexPaymentDTO::VIEW_CREDITCARD;
+        } else {
+            throw new \InvalidArgumentException('Invalid payment method');
+        }
+
         $payexPaymentDTO = $this->fillPayexPaymentDTO(
-            $response->amount,
-            $response->paymentMethod,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            (int) $response->amount,
+            $view,
+            $payexPayment->getCurrencyCode(),
+            '',
+            $payexPayment->getCancelUrl(),
+            '',
+            0,
+            '',
             $response->orderId,
-            null,
-            null
+            '',
+            ''
         );
 
         $payexPayment = $this->storePayexPayment(
@@ -186,17 +196,17 @@ class PaymentManager
     }
 
     public function fillPayexPaymentDTO(
-            $amount,
-            $view,
-            $currency,
-            $returnUrl,
-            $cancelUrl,
-            $clientLanguage,
-            $clientId,
-            $clientEmail,
-            $orderId,
-            $productNumber,
-            $description
+        $amount,
+        $view,
+        $currency,
+        $returnUrl,
+        $cancelUrl,
+        $clientLanguage,
+        $clientId,
+        $clientEmail,
+        $orderId,
+        $productNumber,
+        $description
     ): PayexPaymentDTO
     {
         $payexPaymentDTO = new PayexPaymentDTO();
@@ -267,9 +277,9 @@ class PaymentManager
         $payexPayment->setTransactionRef($transactionRef);
         $payexPayment->setRedirectUrl($payexPaymentDTO->getRedirectUrl());
         $payexPayment->setCancelUrl($payexPaymentDTO->getCancelUrl());
-        $payexPayment->setTransactionStatus($transactionStatus);
-        $payexPayment->setOrderStatus($orderStatus);
-        $payexPayment->setTransactionNumber($transactionNumber);
+        $payexPayment->setTransactionStatus((int) $transactionStatus);
+        $payexPayment->setOrderStatus((int) $orderStatus);
+        $payexPayment->setTransactionNumber((int) $transactionNumber);
         $payexPayment->setOrderId($payexPaymentDTO->getOrderId());
         $payexPayment->setRequestDetails($request);
         $payexPayment->setResponseDetails($response);
