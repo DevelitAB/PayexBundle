@@ -3,6 +3,7 @@
 namespace Bsadnu\PayexBundle\Services;
 
 use Bsadnu\PayexBundle\DTO\PayexPayment as PayexPaymentDTO;
+use Bsadnu\PayexBundle\DTO\PayexPaymentBunch;
 use Bsadnu\PayexBundle\Entity\PayexPayment;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -115,7 +116,7 @@ class PaymentManager
         return $payexPayment;
     }
 
-    public function completePayment(string $orderRef, string $customData = ''): PayexPayment
+    public function completePayment(string $orderRef, string $customData = ''): PayexPaymentBunch
     {
         $completeParams = [
             'accountNumber' => $this->accountNumber,
@@ -123,13 +124,13 @@ class PaymentManager
             'hash' => ''
         ];
 
-        $payexPayment = $this
+        $payexPaymentOld = $this
             ->entityManager
             ->getRepository(PayexPayment::class)
             ->findOneBy([
                 'orderRef' => $orderRef
             ]);
-        if (!$payexPayment) {
+        if (!$payexPaymentOld || (!$payexPaymentOld instanceof PayexPayment)) {
             throw new \InvalidArgumentException('Invalid orderRef.');
         }
 
@@ -149,9 +150,9 @@ class PaymentManager
         $payexPaymentDTO = $this->fillPayexPaymentDTO(
             (float) ($response->amount / 100),
             $view,
-            $payexPayment->getCurrencyCode(),
+            $payexPaymentOld->getCurrencyCode(),
             '',
-            $payexPayment->getCancelUrl(),
+            $payexPaymentOld->getCancelUrl(),
             '',
             0,
             '',
@@ -163,7 +164,7 @@ class PaymentManager
 
         if ($response->status->errorCode == 'OK' ) {
             if (($response->transactionStatus == 0) || ($response->transactionStatus == 3)) {
-                $this->storePayexPayment(
+                $payexPaymentNew = $this->storePayexPayment(
                     $payexPaymentDTO,
                     $response->orderRef,
                     $response->sessionRef,
@@ -175,7 +176,9 @@ class PaymentManager
                     $response->transactionNumber
                 );
 
-                return $payexPayment;
+                $payexPaymentBunch = new PayexPaymentBunch($payexPaymentOld, $payexPaymentNew);
+
+                return $payexPaymentBunch;
             } else {
                 throw new \RuntimeException('Payex server response error');
             }
