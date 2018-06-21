@@ -109,7 +109,7 @@ class PaymentManager
             $response->orderRef,
             $response->sessionRef,
             $lastRequest,
-            $response
+            json_encode($response)
         );
 
         return $payexPayment;
@@ -160,18 +160,6 @@ class PaymentManager
             ''
         );
 
-        $payexPayment = $this->storePayexPayment(
-            $payexPaymentDTO,
-            $response->orderRef,
-            $response->sessionRef,
-            $lastRequest,
-            $response,
-            $response->transactionRef,
-            $response->transactionStatus,
-            $response->orderStatus,
-            $response->transactionNumber
-        );
-
         if ($response->status->errorCode == 'OK' ) {
             if (($response->transactionStatus == 0) || ($response->transactionStatus == 3)) {
                 $payexPayment = $this->storePayexPayment(
@@ -179,7 +167,7 @@ class PaymentManager
                     $response->orderRef,
                     $response->sessionRef,
                     $lastRequest,
-                    $response,
+                    json_encode($response),
                     $response->transactionRef,
                     $response->transactionStatus,
                     $response->orderStatus,
