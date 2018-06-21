@@ -147,7 +147,7 @@ class PaymentManager
         }
 
         $payexPaymentDTO = $this->fillPayexPaymentDTO(
-            (int) $response->amount,
+            (float) ($response->amount / 100),
             $view,
             $payexPayment->getCurrencyCode(),
             '',
