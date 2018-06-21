@@ -115,7 +115,7 @@ class PaymentManager
         return $payexPayment;
     }
 
-    public function completePayment($orderRef): PayexPayment
+    public function completePayment(string $orderRef, string $customData): PayexPayment
     {
         $completeParams = [
             'accountNumber' => $this->accountNumber,
@@ -157,7 +157,8 @@ class PaymentManager
             '',
             $response->orderId,
             '',
-            ''
+            '',
+            $customData
         );
 
         if ($response->status->errorCode == 'OK' ) {
@@ -194,7 +195,8 @@ class PaymentManager
         $clientEmail,
         $orderId,
         $productNumber,
-        $description
+        $description,
+        $customData
     ): PayexPaymentDTO
     {
         $payexPaymentDTO = new PayexPaymentDTO();
@@ -237,6 +239,7 @@ class PaymentManager
             ->setClientId($clientId)
             ->setClientEmail($clientEmail)
             ->setAmount($amount)
+            ->setCustomData($customData)
         ;
 
         return $payexPaymentDTO;
@@ -271,6 +274,7 @@ class PaymentManager
         $payexPayment->setOrderId($payexPaymentDTO->getOrderId());
         $payexPayment->setRequestDetails($request);
         $payexPayment->setResponseDetails($response);
+        $payexPayment->setCustomData($payexPaymentDTO->getCustomData());
 
         $this->entityManager->persist($payexPayment);
         $this->entityManager->flush();

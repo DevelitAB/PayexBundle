@@ -143,6 +143,13 @@ class PayexPayment
     private $responseDetails;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="text", nullable=true, length=4294967295)
+     */
+    private $customData;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -325,6 +332,16 @@ class PayexPayment
     public function setResponseDetails(?string $responseDetails): void
     {
         $this->responseDetails = $responseDetails;
+    }
+
+    public function getCustomData(): ?string
+    {
+        return $this->customData;
+    }
+
+    public function setCustomData(?string $customData): void
+    {
+        $this->customData = $customData;
     }
 
     public function getCreatedAt(): \DateTime
