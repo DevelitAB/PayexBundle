@@ -74,10 +74,10 @@ class PayexPayment
     /** @var float */
     private $amount;
 
-    /** @var string */
+    /** @var string|null */
     private $redirectUrl;
 
-    /** @var string */
+    /** @var string|null */
     private $customData;
 
     public function __construct(
@@ -102,8 +102,8 @@ class PayexPayment
         string  $clientId = null,
         string  $clientEmail = null,
         float  $amount = 0,
-        string  $redirectUrl = '',
-        string  $customData = ''
+        string  $redirectUrl = null,
+        string  $customData = null
     )
     {
         $this
@@ -385,12 +385,12 @@ class PayexPayment
         return $this;
     }
 
-    public function getRedirectUrl(): string
+    public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
     }
 
-    public function setRedirectUrl(string $redirectUrl): self
+    public function setRedirectUrl(?string $redirectUrl): self
     {
         $this->redirectUrl = $redirectUrl;
 

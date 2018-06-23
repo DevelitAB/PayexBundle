@@ -165,6 +165,7 @@ class PaymentManager
             '',
             null
         );
+        $payexPaymentDTO->setRedirectUrl($payexPaymentOld->getRedirectUrl());
 
         if ($response->status->errorCode == 'OK' ) {
             $payexPaymentNew = $this->storePayexPayment(
