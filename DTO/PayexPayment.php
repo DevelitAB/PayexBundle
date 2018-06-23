@@ -397,12 +397,12 @@ class PayexPayment
         return $this;
     }
 
-    public function getCustomData(): string
+    public function getCustomData(): ?string
     {
         return $this->customData;
     }
 
-    public function setCustomData(string $customData): self
+    public function setCustomData(?string $customData): self
     {
         $this->customData = $customData;
 

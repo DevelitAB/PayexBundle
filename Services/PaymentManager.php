@@ -116,7 +116,7 @@ class PaymentManager
         return $payexPayment;
     }
 
-    public function completePayment(string $orderRef, string $customData = ''): PayexPaymentBunch
+    public function completePayment(string $orderRef): PayexPaymentBunch
     {
         $completeParams = [
             'accountNumber' => $this->accountNumber,
@@ -154,34 +154,30 @@ class PaymentManager
             '',
             $payexPaymentOld->getCancelUrl(),
             '',
-            0,
-            '',
+            $payexPaymentOld->getClientId(),
+            $payexPaymentOld->getClientEmail(),
             $response->orderId,
             '',
             '',
-            $customData
+            null
         );
 
         if ($response->status->errorCode == 'OK' ) {
-            if (($response->transactionStatus == 0) || ($response->transactionStatus == 3)) {
-                $payexPaymentNew = $this->storePayexPayment(
-                    $payexPaymentDTO,
-                    $response->orderRef,
-                    $response->sessionRef,
-                    $lastRequest,
-                    json_encode($response),
-                    $response->transactionRef,
-                    $response->transactionStatus,
-                    $response->orderStatus,
-                    $response->transactionNumber
-                );
+            $payexPaymentNew = $this->storePayexPayment(
+                $payexPaymentDTO,
+                $payexPaymentOld->getOrderRef(),
+                $payexPaymentOld->getSessionRef(),
+                $lastRequest,
+                json_encode($response),
+                $response->transactionRef,
+                $response->transactionStatus,
+                $response->orderStatus,
+                $response->transactionNumber
+            );
 
-                $payexPaymentBunch = new PayexPaymentBunch($payexPaymentOld, $payexPaymentNew);
+            $payexPaymentBunch = new PayexPaymentBunch($payexPaymentOld, $payexPaymentNew);
 
-                return $payexPaymentBunch;
-            } else {
-                throw new \RuntimeException('Payex server response error');
-            }
+            return $payexPaymentBunch;
         } else {
             throw new \RuntimeException('Payex server response error');
         }
