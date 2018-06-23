@@ -363,4 +363,17 @@ class PayexPayment
     {
         $this->updatedAt = $updatedAt;
     }
+
+    public function isPurchaseSuccessful(): bool
+    {
+        return in_array($this->getTransactionStatus(), self::successfulTransactionStatuses());
+    }
+
+    public static function successfulTransactionStatuses(): array
+    {
+        return [
+            0,
+            3,
+        ];
+    }
 }

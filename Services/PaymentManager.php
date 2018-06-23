@@ -110,7 +110,11 @@ class PaymentManager
             $response->orderRef,
             $response->sessionRef,
             $lastRequest,
-            json_encode($response)
+            json_encode($response),
+            null,
+            null,
+            null,
+            null
         );
 
         return $payexPayment;
@@ -170,9 +174,9 @@ class PaymentManager
                 $lastRequest,
                 json_encode($response),
                 $response->transactionRef,
-                $response->transactionStatus,
-                $response->orderStatus,
-                $response->transactionNumber
+                (int) $response->transactionStatus,
+                (int) $response->orderStatus,
+                (int) $response->transactionNumber
             );
 
             $payexPaymentBunch = new PayexPaymentBunch($payexPaymentOld, $payexPaymentNew);
@@ -250,10 +254,10 @@ class PaymentManager
         $sessionRef,
         $request,
         $response,
-        $transactionRef = null,
-        $transactionStatus = null,
-        $orderStatus = null,
-        $transactionNumber = null
+        $transactionRef,
+        $transactionStatus,
+        $orderStatus,
+        $transactionNumber
     ): PayexPayment
     {
         $payexPayment = new PayexPayment();
@@ -267,9 +271,9 @@ class PaymentManager
         $payexPayment->setTransactionRef($transactionRef);
         $payexPayment->setRedirectUrl($payexPaymentDTO->getRedirectUrl());
         $payexPayment->setCancelUrl($payexPaymentDTO->getCancelUrl());
-        $payexPayment->setTransactionStatus((int) $transactionStatus);
-        $payexPayment->setOrderStatus((int) $orderStatus);
-        $payexPayment->setTransactionNumber((int) $transactionNumber);
+        $payexPayment->setTransactionStatus($transactionStatus);
+        $payexPayment->setOrderStatus($orderStatus);
+        $payexPayment->setTransactionNumber($transactionNumber);
         $payexPayment->setOrderId($payexPaymentDTO->getOrderId());
         $payexPayment->setRequestDetails($request);
         $payexPayment->setResponseDetails($response);
