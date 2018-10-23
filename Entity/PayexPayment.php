@@ -1,11 +1,11 @@
 <?php
 
-namespace Bsadnu\PayexBundle\Entity;
+namespace DevelitAB\PayexBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="Bsadnu\PayexBundle\Repository\PayexPaymentRepository")
+ * @ORM\Entity(repositoryClass="DevelitAB\PayexBundle\Repository\PayexPaymentRepository")
  */
 class PayexPayment
 {
