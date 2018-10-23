@@ -1,13 +1,13 @@
 services:
-    bsadnu.payex.payment_manager:
-        alias: Bsadnu\PayexBundle\Services\PaymentManager
+    develit_ab.payex.payment_manager:
+        alias: DevelitAB\PayexBundle\Services\PaymentManager
         public: true
-    Bsadnu\PayexBundle\Repository\PayexPaymentRepository:
+    DevelitAB\PayexBundle\Repository\PayexPaymentRepository:
         autowire: true
         public: false
         tags: ['doctrine.repository_service']
-    Bsadnu\PayexBundle\Services\PaymentManager:
+    DevelitAB\PayexBundle\Services\PaymentManager:
         public: false
         arguments:
-            - '%bsadnu.payex.config%'
+            - '%develit_ab.payex.config%'
             - '@doctrine.orm.entity_manager'
