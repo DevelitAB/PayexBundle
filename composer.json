@@ -1,5 +1,5 @@
 {
-  "name": "bsadnu/payex-bundle",
+  "name": "develit-ab/payex-bundle",
   "description": "A lightweight symfony bundle that implements PayEx payments https://payex.com/",
   "keywords": ["symfony", "payex"],
   "type": "symfony-bundle",
@@ -17,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Bsadnu\\PayexBundle\\": ""
+      "DevelitAB\\PayexBundle\\": ""
     }
   }
 }
