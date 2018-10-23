@@ -1,7 +1,8 @@
 <?php
 
-namespace Bsadnu\PayexBundle\Services;
-use Bsadnu\PayexBundle\Utils\PayexHash;
+namespace DevelitAB\PayexBundle\Services;
+
+use DevelitAB\PayexBundle\Utils\PayexHash;
 
 /**
  * Service that handles calling PxOrder API.
