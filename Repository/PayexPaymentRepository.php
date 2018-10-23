@@ -1,8 +1,8 @@
 <?php
 
-namespace Bsadnu\PayexBundle\Repository;
+namespace DevelitAB\PayexBundle\Repository;
 
-use Bsadnu\PayexBundle\Entity\PayexPayment;
+use DevelitAB\PayexBundle\Entity\PayexPayment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
