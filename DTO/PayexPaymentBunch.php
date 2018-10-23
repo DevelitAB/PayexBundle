@@ -1,8 +1,8 @@
 <?php
 
-namespace Bsadnu\PayexBundle\DTO;
+namespace DevelitAB\PayexBundle\DTO;
 
-use Bsadnu\PayexBundle\Entity\PayexPayment AS PayexPaymentEntity;
+use DevelitAB\PayexBundle\Entity\PayexPayment AS PayexPaymentEntity;
 
 class PayexPaymentBunch
 {
