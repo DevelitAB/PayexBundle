@@ -1,6 +1,6 @@
 <?php
 
-namespace Bsadnu\PayexBundle;
+namespace DevelitAB\PayexBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
