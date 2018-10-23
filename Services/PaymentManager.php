@@ -1,10 +1,10 @@
 <?php
 
-namespace Bsadnu\PayexBundle\Services;
+namespace DevelitAB\PayexBundle\Services;
 
-use Bsadnu\PayexBundle\DTO\PayexPayment as PayexPaymentDTO;
-use Bsadnu\PayexBundle\DTO\PayexPaymentBunch;
-use Bsadnu\PayexBundle\Entity\PayexPayment;
+use DevelitAB\PayexBundle\DTO\PayexPayment as PayexPaymentDTO;
+use DevelitAB\PayexBundle\DTO\PayexPaymentBunch;
+use DevelitAB\PayexBundle\Entity\PayexPayment;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PaymentManager
