@@ -1,6 +1,6 @@
 <?php
 
-namespace Bsadnu\PayexBundle\DTO;
+namespace DevelitAB\PayexBundle\DTO;
 
 class PayexPayment
 {
