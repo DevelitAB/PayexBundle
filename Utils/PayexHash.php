@@ -1,6 +1,6 @@
 <?php
 
-namespace Bsadnu\PayexBundle\Utils;
+namespace DevelitAB\PayexBundle\Utils;
 
 /**
  * Helper util for creating hash.
