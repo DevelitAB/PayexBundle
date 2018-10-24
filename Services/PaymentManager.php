@@ -215,8 +215,7 @@ class PaymentManager
         } elseif ($view === PayexPaymentDTO::VIEW_DIRECTDEBIT) {
             $payexPaymentDTO
                 ->setPurchaseOperation(PayexPaymentDTO::PURCHASE_OPERATION_SALE)
-                ->setPrice(0)
-                ->setPriceArgList('SHB=' . $amount * 100 . ',NB=' . $amount * 100)
+                ->setPrice($amount * 100)
                 ->setView($view);
         } elseif ($view === PayexPaymentDTO::VIEW_SWISH) {
             $payexPaymentDTO
